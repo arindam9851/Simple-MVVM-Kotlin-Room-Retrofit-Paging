@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name = "Kotlin-Retrofit-without-suspend"
