@@ -8,5 +8,8 @@ Advantages of Room over SQLite?
 Important Annotation in Room.
 Step-by-Step Simple Insert and Read Example
 Conclusion
+
+
+
 **Important Annotations in Room.**
 ![image](https://user-images.githubusercontent.com/8407230/114168671-358f1380-994e-11eb-939a-ea0f15ca8b18.png)
