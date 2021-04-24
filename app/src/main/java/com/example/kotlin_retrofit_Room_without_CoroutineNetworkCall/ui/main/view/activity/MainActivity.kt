@@ -1,56 +1,86 @@
 package com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.ui.main.view.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.R
 import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.data.api.ApiHelper
 import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.data.api.RetrofitBuilder
-import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.data.model.Data
+import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.data.model.PostAPIResponse
+import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.data.model.ResponseItem
 import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.ui.base.ViewModelFactory
+import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.ui.main.view.adapter.AllPostAdapter
 import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.ui.main.viewmodel.MainActivityViewModel
+import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     private lateinit var viewModel: MainActivityViewModel
+    private lateinit var mAdapter: AllPostAdapter
+    private var mList = ArrayList<ResponseItem>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setUpUI()
         setupViewModel()
-        setUpLanguageListObserver()
-//        setUpDatbaseObserver()
-    }
+        setUpDatabaseObserver()
 
-    private fun setUpDatbaseObserver() {
-        viewModel.getLanguage() .observe(this, Observer {
-            if(it!=null)
-                Toast.makeText(this,it[1].lang,Toast.LENGTH_LONG).show()
-            Log.d("tag",it.toString())
-        })
 
     }
 
-    private fun setUpLanguageListObserver() {
-        viewModel.networkcall("com")
+    private fun setUpDatabaseObserver() {
+        viewModel.getAllPost()
                 .observe(this, Observer {
-                    if(it!=null)
+                    if(it.isNotEmpty()){
+                        mList.clear()
+                        mList.addAll(it)
+                        mAdapter.notifyDataSetChanged()
+                    }
+                    else{
+                        setUpApiCallObserver()
+                    }
+                })
+
+    }
+
+    private fun setUpUI() {
+
+        mAdapter = AllPostAdapter(mList, this)
+        recycler_post.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL,false)
+            adapter = mAdapter
+        }
+    }
+
+
+    private fun setUpApiCallObserver() {
+        viewModel.getPost()
+                .observe(this, Observer {
+                    if(it.isNotEmpty())
                     {
-                        for(i in it.data.indices)
-                        {
-                            var data1 = Data()
-                            data1.key=it.data[i].key
-                            data1.lang=it.data[i].lang
-                            data1.code=it.data[i].code
-                            viewModel.insertData(data1)
-                        }
-                        Toast.makeText(this,"Insert Successful",Toast.LENGTH_LONG).show()
-                        Log.d("tag",it.data.toString())
+                        insertDataToDb(it)
+
                     }
                 })
 
 
+
+    }
+
+    private fun insertDataToDb(postAPIResponse: PostAPIResponse) {
+        for(i in postAPIResponse.indices){
+            var model=ResponseItem()
+            model.body=postAPIResponse[i].body
+            model.id=postAPIResponse[i].id
+            model.title=postAPIResponse[i].title
+            model.userId=postAPIResponse[i].userId
+            viewModel.insertData(model)
+
+        }
 
     }
 
@@ -60,5 +90,12 @@ class MainActivity : AppCompatActivity() {
             ViewModelFactory(ApiHelper(RetrofitBuilder.apiService,this),this)
         ).get(MainActivityViewModel::class.java)
 
+    }
+
+    fun navigateData(id: Int) {
+
+        val intent = Intent(this, DetailActivity::class.java)
+        intent.putExtra("id",id)
+        startActivity(intent)
     }
 }

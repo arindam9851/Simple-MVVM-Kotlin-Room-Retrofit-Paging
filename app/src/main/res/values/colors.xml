@@ -9,5 +9,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="transparency">#00000000</color>
     <color name="loader">#081BB6</color>
+    <color name="c_list">#E3DEEA</color>
+    <color name="c_text">#888888</color>
+    <color name="c_add_new_industry_edittext">#F6F6F6</color>
+    <color name="c_leads_list_date">#626262</color>
+
 
 </resources>

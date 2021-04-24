@@ -1,13 +1,12 @@
 package com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.data.api
 
-import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.data.model.LanguageResponse
+import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.data.model.PostAPIResponse
 import retrofit2.http.GET
-import retrofit2.http.Query
 import rx.Observable
 
 interface ApiService {
-    @GET("api/language/get_list")
-    fun getLanguageList(@Query("appname")s: String):  Observable<LanguageResponse>
+    @GET("posts")
+    fun getPost():  Observable<PostAPIResponse>
 
 
 

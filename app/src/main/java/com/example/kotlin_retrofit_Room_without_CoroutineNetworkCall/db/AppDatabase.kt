@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.data.model.Data
+import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.data.model.ResponseItem
 
-@Database(entities = arrayOf(Data::class), version = 1, exportSchema = false)
+@Database(entities = arrayOf(ResponseItem::class), version = 1, exportSchema = false)
 
 abstract class AppDatabase: RoomDatabase() {
     abstract fun appDao() : AppDao

@@ -9,7 +9,7 @@ import javax.net.ssl.SSLContext
 
 
 object RetrofitBuilder {
-    private const val BASE_URL = "https://twr-stage.pimcoreclients.com/"
+    private const val BASE_URL = "http://jsonplaceholder.typicode.com/"
     private var sOkHttpClient: OkHttpClient? = null
     private var sslContext: SSLContext? = null
     private var sslSocketFactory: javax.net.ssl.SSLSocketFactory? = null
@@ -33,7 +33,7 @@ object RetrofitBuilder {
                     val original = chain.request()
                     //int maxAge = 60 * 60 * 24; // tolerate 1 day
                     val request = original.newBuilder()
-                            .header("apikey", "bf37b03c45679197fe51bcd8a48c79ff68414f4f23d254aba0fcedcb4ef4240b") //.header("Content-Type", "application/x-www-form-urlencoded")
+                             //.header("Content-Type", "application/x-www-form-urlencoded")
                             .method(original.method(), original.body())
                             .build()
                     chain.proceed(request)
