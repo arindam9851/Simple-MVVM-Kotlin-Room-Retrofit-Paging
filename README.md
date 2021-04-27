@@ -4,15 +4,10 @@ If you’re looking for an explanation on Room implementation on Android using K
 Let’s see what I have in store for you.
 
 What is Room,
-
 Kotlin, MVVM, Coroutines?
-
-Advantages of Room over SQLite?
-
 Important Annotation in Room.
-
 Step-by-Step Simple Insert and Read Example
-
+Paging **DataSource.Factory** for loading data in recycler view
 
 
 
