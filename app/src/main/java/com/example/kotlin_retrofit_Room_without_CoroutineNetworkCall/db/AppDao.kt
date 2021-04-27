@@ -1,6 +1,7 @@
 package com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.db
 
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -12,7 +13,7 @@ interface AppDao {
     fun insertAll( data: ResponseItem)
 
     @Query("SELECT * FROM allPostTable")
-    fun getPost(): LiveData<List<ResponseItem>>
+    fun getPost(): DataSource.Factory<Int, ResponseItem>
 
     @Query("SELECT * FROM allPostTable Where id=:id")
     fun getParticularData(id: Int): LiveData<List<ResponseItem>>

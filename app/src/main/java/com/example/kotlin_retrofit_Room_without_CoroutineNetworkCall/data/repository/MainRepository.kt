@@ -3,6 +3,9 @@ package com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.data.repos
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.paging.DataSource
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.data.api.ApiHelper
 import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.data.model.PostAPIResponse
 import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.data.model.ResponseItem
@@ -33,9 +36,24 @@ class MainRepository(private val apiHelper: ApiHelper, val mContext: BaseActivit
         }
 
     }
-    fun getAllPost(): LiveData<List<ResponseItem>> {
+    fun getAllPost(): LiveData<PagedList<ResponseItem>> {
         appDatabase = initializeDB(mContext)
-        return appDatabase!!.appDao().getPost()
+        var personsLiveData: LiveData<PagedList<ResponseItem>>
+        val config= PagedList.Config.Builder()
+                .setPageSize(10)
+                .setEnablePlaceholders(false)
+                .build()
+        val factory: DataSource.Factory<Int, ResponseItem> = appDatabase!!.appDao().getPost()
+
+
+        val data: LivePagedListBuilder<Int, ResponseItem> = LivePagedListBuilder(factory,config)
+        personsLiveData=data.build()
+
+
+
+        return personsLiveData
+
+
     }
 
     fun getParticularData(id: Int): LiveData<List<ResponseItem>> {

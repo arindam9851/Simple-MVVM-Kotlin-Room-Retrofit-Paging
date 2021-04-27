@@ -13,18 +13,20 @@ import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.data.model.
 import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.data.model.ResponseItem
 import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.ui.base.ViewModelFactory
 import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.ui.main.view.adapter.AllPostAdapter
+import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.ui.main.view.adapter.AllPostPagedAdapter
 import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.ui.main.viewmodel.MainActivityViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity() {
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var mAdapter: AllPostAdapter
+    private lateinit var mPaggedAdapter: AllPostPagedAdapter
     private var mList = ArrayList<ResponseItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setUpUI()
+//        setUpUI()
         setupViewModel()
         setUpDatabaseObserver()
 
@@ -32,7 +34,29 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setUpDatabaseObserver() {
+        // This is for Paging Library
+        mPaggedAdapter = AllPostPagedAdapter( this)
+        recycler_post.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL,false)
+            adapter = mPaggedAdapter
+        }
         viewModel.getAllPost()
+            .observe(this, Observer { it->
+                if (it.size!=0){
+                    mPaggedAdapter.submitList(it)
+                    recycler_post.adapter=mPaggedAdapter
+
+                }
+                else{
+                    setUpApiCallObserver()
+                }
+            })
+
+
+        // This is for normal adapter
+
+        /*viewModel.getAllPost()
                 .observe(this, Observer {
                     if(it.isNotEmpty()){
                         mList.clear()
@@ -43,16 +67,15 @@ class MainActivity : BaseActivity() {
                         setUpApiCallObserver()
                     }
                 })
-
+*/
     }
 
     private fun setUpUI() {
-
         mAdapter = AllPostAdapter(mList, this)
         recycler_post.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL,false)
-            adapter = mAdapter
+            adapter = mPaggedAdapter
         }
     }
 

@@ -3,6 +3,8 @@ package com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.ui.main.vi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.paging.DataSource
+import androidx.paging.PagedList
 import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.data.model.PostAPIResponse
 import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.data.model.ResponseItem
 import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.data.repository.MainRepository
@@ -19,7 +21,9 @@ class MainActivityViewModel(private val mainRepository: MainRepository,  val mCo
         mainRepository.insertData(data)
     }
 
-    fun getAllPost(): LiveData<List<ResponseItem>> {
+    fun getAllPost(): LiveData<PagedList<ResponseItem>> {
         return mainRepository.getAllPost()
     }
+
+
 }
