@@ -15,31 +15,31 @@ object RetrofitBuilder {
     private var sslSocketFactory: javax.net.ssl.SSLSocketFactory? = null
     private fun getRetrofit(): Retrofit {
         return Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(getOkHttpClient())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(getOkHttpClient())
+            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+            .build()
     }
 
     private fun getOkHttpClient(): OkHttpClient? {
         // Create an ssl socket factory with our all-trusting manager
         sslSocketFactory = sslContext?.getSocketFactory()
         val okHttpClientBuilder = OkHttpClient().newBuilder()
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS)
-                .addInterceptor { chain ->
-                    val original = chain.request()
-                    //int maxAge = 60 * 60 * 24; // tolerate 1 day
-                    val request = original.newBuilder()
-                             //.header("Content-Type", "application/x-www-form-urlencoded")
-                            .method(original.method(), original.body())
-                            .build()
-                    chain.proceed(request)
-                }
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .addInterceptor { chain ->
+                val original = chain.request()
+                //int maxAge = 60 * 60 * 24; // tolerate 1 day
+                val request = original.newBuilder()
+                    //.header("Content-Type", "application/x-www-form-urlencoded")
+                    .method(original.method(), original.body())
+                    .build()
+                chain.proceed(request)
+            }
 
-        sOkHttpClient=okHttpClientBuilder.build()
+        sOkHttpClient = okHttpClientBuilder.build()
 
 
         return sOkHttpClient

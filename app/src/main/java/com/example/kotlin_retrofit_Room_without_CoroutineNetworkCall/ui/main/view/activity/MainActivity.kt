@@ -35,20 +35,20 @@ class MainActivity : BaseActivity() {
 
     private fun setUpDatabaseObserver() {
         // This is for Paging Library
-        mPaggedAdapter = AllPostPagedAdapter( this)
+        mPaggedAdapter = AllPostPagedAdapter(this)
         recycler_post.apply {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL,false)
+            layoutManager =
+                LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
             adapter = mPaggedAdapter
         }
         viewModel.getAllPost()
-            .observe(this, Observer { it->
-                if (it.size!=0){
+            .observe(this, Observer { it ->
+                if (it.size != 0) {
                     mPaggedAdapter.submitList(it)
-                    recycler_post.adapter=mPaggedAdapter
+                    recycler_post.adapter = mPaggedAdapter
 
-                }
-                else{
+                } else {
                     setUpApiCallObserver()
                 }
             })
@@ -74,33 +74,28 @@ class MainActivity : BaseActivity() {
         mAdapter = AllPostAdapter(mList, this)
         recycler_post.apply {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL,false)
+            layoutManager =
+                LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
             adapter = mPaggedAdapter
         }
     }
 
 
     private fun setUpApiCallObserver() {
-        viewModel.getPost()
-                .observe(this, Observer {
-                    if(it.isNotEmpty())
-                    {
-                        insertDataToDb(it)
-
-                    }
-                })
-
-
-
+        viewModel.getPost().observe(this, Observer {
+                if (it.isNotEmpty()) {
+                    insertDataToDb(it)
+                }
+            })
     }
 
     private fun insertDataToDb(postAPIResponse: PostAPIResponse) {
-        for(i in postAPIResponse.indices){
-            var model=ResponseItem()
-            model.body=postAPIResponse[i].body
-            model.id=postAPIResponse[i].id
-            model.title=postAPIResponse[i].title
-            model.userId=postAPIResponse[i].userId
+        for (i in postAPIResponse.indices) {
+            var model = ResponseItem()
+            model.body = postAPIResponse[i].body
+            model.id = postAPIResponse[i].id
+            model.title = postAPIResponse[i].title
+            model.userId = postAPIResponse[i].userId
             viewModel.insertData(model)
 
         }
@@ -110,7 +105,7 @@ class MainActivity : BaseActivity() {
     private fun setupViewModel() {
         viewModel = ViewModelProviders.of(
             this,
-            ViewModelFactory(ApiHelper(RetrofitBuilder.apiService,this),this)
+            ViewModelFactory(ApiHelper(RetrofitBuilder.apiService, this), this)
         ).get(MainActivityViewModel::class.java)
 
     }
@@ -118,7 +113,7 @@ class MainActivity : BaseActivity() {
     fun navigateData(id: Int) {
 
         val intent = Intent(this, DetailActivity::class.java)
-        intent.putExtra("id",id)
+        intent.putExtra("id", id)
         startActivity(intent)
     }
 }

@@ -12,14 +12,15 @@ import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.data.model.
 import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.ui.main.view.activity.BaseActivity
 import com.example.kotlin_retrofit_Room_without_CoroutineNetworkCall.ui.main.view.activity.MainActivity
 
-class AllPostPagedAdapter(val mContext:BaseActivity) : PagedListAdapter<ResponseItem, AllPostPagedAdapter.ViewHolder>(DiffCallback()) {
+class AllPostPagedAdapter(val mContext: BaseActivity) :
+    PagedListAdapter<ResponseItem, AllPostPagedAdapter.ViewHolder>(DiffCallback()) {
 
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)  {
-        val tvTitle=itemView.findViewById(R.id.txt_header)as AppCompatTextView
-        val tvBody=itemView.findViewById(R.id.txt_content)as AppCompatTextView
-        val tvId=itemView.findViewById(R.id.txt_id)as AppCompatTextView
-        val lin=itemView.findViewById(R.id.lin)as LinearLayout
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val tvTitle = itemView.findViewById(R.id.txt_header) as AppCompatTextView
+        val tvBody = itemView.findViewById(R.id.txt_content) as AppCompatTextView
+        val tvId = itemView.findViewById(R.id.txt_id) as AppCompatTextView
+        val lin = itemView.findViewById(R.id.lin) as LinearLayout
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -31,8 +32,8 @@ class AllPostPagedAdapter(val mContext:BaseActivity) : PagedListAdapter<Response
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var model = getItem(position)
-        holder.tvTitle.text=model!!.title
-        holder.tvBody.text=model.body
+        holder.tvTitle.text = model!!.title
+        holder.tvBody.text = model.body
         holder.lin.setOnClickListener(View.OnClickListener {
             ((mContext as MainActivity).navigateData(model.id))
         })

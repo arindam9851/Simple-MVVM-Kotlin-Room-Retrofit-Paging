@@ -12,30 +12,34 @@ import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 
 
-
-
-class ApiHelper(private val apiService: ApiService, val mContext: BaseActivity){
+class ApiHelper(private val apiService: ApiService, val mContext: BaseActivity) {
     private var postAPIResponseLiveData = MutableLiveData<PostAPIResponse>()
     private val compositeSubscription = CompositeSubscription()
     fun getPost(): MutableLiveData<PostAPIResponse> {
-        
-        compositeSubscription.add(apiService.getPost()
-                .subscribeOn(Schedulers.io())
-                .doOnSubscribe {
-                }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        {
-                            postResult ->
-                            postAPIResponseLiveData.postValue(postResult)
-                        },
-                        {
-                            error->
-                            Log.d("error",error.message.toString())
-                            Toast.makeText(mContext,(error as HttpException).message(),Toast.LENGTH_LONG).show()
-                        }))
-        return postAPIResponseLiveData
 
+        compositeSubscription.add(apiService.getPost()
+            .subscribeOn(Schedulers.io())
+            .doOnSubscribe {
+            }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { postResult ->
+                    postAPIResponseLiveData.postValue(postResult)
+                },
+                { error ->
+                    Log.d("error", error.message.toString())
+                    try {
+                        Toast.makeText(
+                            mContext,
+                            (error as HttpException).message(),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } catch (e: Exception) {
+                        Log.d("error", e.message.toString())
+                    }
+                })
+        )
+        return postAPIResponseLiveData
 
     }
 
